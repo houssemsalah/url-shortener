@@ -22,11 +22,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
   // Enable CORS
- app.enableCors({
-    origin: 'http://localhost:3000', // Allow frontend
-    methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization',
-  });
+ app.enableCors();
   // Enable validation
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
