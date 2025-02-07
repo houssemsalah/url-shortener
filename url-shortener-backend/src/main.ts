@@ -22,7 +22,15 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
   // Enable CORS
- app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://localhost:3000', // Development origin
+      'https://url-shortener-frontend-omega-lovat.vercel.app', // Production frontend origin
+      'https://url-shortener-backend-iota.vercel.app', // Backend origin if needed
+    ],
+    methods: 'GET, POST, PUT, DELETE, OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization',
+  });
   // Enable validation
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
