@@ -1,7 +1,7 @@
 import { Analytics } from './../../../url-shortener-backend/src/analytics/analytics.schema';
 import axios from 'axios';
 
-const API_BASE_URL = 'http://127.0.0.1:3001';
+const API_BASE_URL = 'url-shortener-frontend-omega-lovat.vercel.app';
 
 export const Api = {
   shortenUrl: async (url: string) => {
