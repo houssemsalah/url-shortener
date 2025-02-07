@@ -3,7 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import  express from 'express';
+import express from 'express';
 import 'reflect-metadata';
 
 const server = express();
@@ -27,11 +27,10 @@ export const createNestApp = async (expressInstance: express.Express) => {
 
   // Enable CORS
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', // Make this configurable
-    methods: 'GET,POST,PUT,DELETE',
-    allowedHeaders: 'Content-Type,Authorization',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
   });
-
   // Enable validation
   app.useGlobalPipes(
     new ValidationPipe({
@@ -40,17 +39,23 @@ export const createNestApp = async (expressInstance: express.Express) => {
     }),
   );
 
+  await app.init();
   return app;
 };
 
+let cachedApp: express.Express;
+
 async function bootstrap() {
-  const app = await createNestApp(server);
-  await app.init();
-  
-  // Only listen to port when running in development
-  if (process.env.NODE_ENV !== 'production') {
-    await app.listen(process.env.PORT || 3001);
+  if (!cachedApp) {
+    const app = await createNestApp(server);
+    cachedApp = server;
+
+    // Only listen to port when running in development
+    if (process.env.NODE_ENV !== 'production') {
+      await app.listen(process.env.PORT || 3001);
+    }
   }
+  return cachedApp;
 }
 
 // Local development
@@ -59,4 +64,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // Export for serverless use
-export default server;
+export default async function handler(req: any, res: any) {
+  const app = await bootstrap();
+  return app(req, res);
+}
