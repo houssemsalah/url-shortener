@@ -24,12 +24,12 @@ async function bootstrap() {
   // Enable CORS
   app.enableCors({
     origin: [
-      'http://localhost:3000', // Development origin
-      'https://url-shortener-frontend-omega-lovat.vercel.app', // Production frontend origin
-      'https://url-shortener-backend-iota.vercel.app', // Backend origin if needed
+      'https://url-shortener-frontend-omega-lovat.vercel.app', // Frontend production URL
+      'http://localhost:3000', // Local development URL
     ],
     methods: 'GET, POST, PUT, DELETE, OPTIONS',
     allowedHeaders: 'Content-Type, Authorization',
+    credentials: true, // Allows cookies, if needed
   });
   // Enable validation
   app.useGlobalPipes(new ValidationPipe({
