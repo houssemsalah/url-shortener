@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UrlController } from './url.controller';
 import { UrlService } from './url.service';
 import { Url, UrlSchema } from './schemas/url.schema';
-import { AnalyticsModule } from 'src/analytics/analytics.module';
+import { AnalyticsModule } from '../analytics/analytics.module';
 
 
 
